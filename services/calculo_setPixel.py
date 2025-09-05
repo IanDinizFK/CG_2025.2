@@ -15,7 +15,7 @@ def desenhar_com_opengl(largura_tela, altura_tela, x_pixel, y_pixel):
 
         glPointSize(1.0)
 
-        glColor3f(1.0, 1.0, 0.0)
+        glColor3f(0.0, 1.0, 0.0)
         glBegin(GL_POINTS)
         glVertex2f(gl_x, gl_y)
         glEnd()

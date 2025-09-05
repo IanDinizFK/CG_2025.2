@@ -2,7 +2,6 @@ import tkinter as tk
 from screens.setpixel import criar_tela_setpixel
 
 
-# Função para trocar os frames
 def mostrar_frame(frame):
     frame.tkraise()
 
