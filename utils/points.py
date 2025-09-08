@@ -38,3 +38,26 @@ def parse_points(text: str) -> List[Point]:
         raise ValueError("Nenhum ponto informado.")
     return points
 
+
+def normalize_points(points: List[Point]) -> List[Point]:
+    """Normaliza os pontos para caberem dentro da viewport [-1, 1] x [-1, 1]."""
+    if not points:
+        return []
+
+    xs = [x for x, y in points]
+    ys = [y for x, y in points]
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+
+    # Evita divisão por zero
+    width_x = max_x - min_x if max_x > min_x else 1.0
+    width_y = max_y - min_y if max_y > min_y else 1.0
+
+    # Escala para caber em [-1, 1]
+    normalized = []
+    for x, y in points:
+        nx = -1.0 + 2.0 * (x - min_x) / width_x
+        ny = -1.0 + 2.0 * (y - min_y) / width_y
+        normalized.append((nx, ny))
+
+    return normalized

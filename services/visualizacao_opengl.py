@@ -22,7 +22,7 @@ class OpenGLCanvas(OpenGLFrame):
 
     def initgl(self):
         print("[OpenGLCanvas] initgl: size=", self.width, self.height)
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glViewport(0, 0, self.width, self.height)
 
         glMatrixMode(GL_PROJECTION)
@@ -51,7 +51,7 @@ class OpenGLCanvas(OpenGLFrame):
         glVertex2f(0.0, 1.0)
         glEnd()
 
-        glColor3f(1.0, 1.0, 1.0)
+        glColor3f(0.0, 0.0, 0.0)
         if self.pontos:
             glBegin(GL_LINE_LOOP if len(self.pontos) > 2 else GL_LINE_STRIP)
             for x, y in self.pontos:
@@ -64,3 +64,6 @@ class OpenGLCanvas(OpenGLFrame):
             self._display()
         except Exception:
             self.after(0, self._display)
+
+    def get_pontos(self) -> List[Point]:
+        return list(self.pontos)
