@@ -1,6 +1,6 @@
 import tkinter as tk
 from screens.setpixel import criar_tela_setpixel
-
+from screens.circle_midpoint import criar_tela_circulo
 
 def mostrar_frame(frame):
     frame.tkraise()
@@ -40,6 +40,10 @@ btn_setpixel = tk.Button(tela_basicos, text="SetPixel", width=20, command=lambda
 
 btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: mostrar_mensagem("DDA"))
 btn_dda.pack(pady=5)
+
+btn_circulo = tk.Button(tela_basicos, text="Círculo Ponto Médio", width=20,
+                        command=lambda: criar_tela_circulo(janela, lambda: mostrar_frame(tela_basicos)))
+btn_circulo.pack(pady=5)
 
 btn_voltar = tk.Button(tela_basicos, text="Voltar", width=10, command=lambda: mostrar_frame(tela_inicial))
 btn_voltar.pack(pady=20)
