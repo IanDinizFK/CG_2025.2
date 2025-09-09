@@ -54,7 +54,7 @@ btn_setpixel.pack(pady=5)
 btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: mostrar_mensagem("DDA"))
 btn_dda.pack(pady=5)
 
-btn_circulo = tk.Button(tela_basicos, text="Círculo Ponto Médio", width=20,
+btn_circulo = tk.Button(tela_basicos, text="Círculo algoritmos", width=20,
                         command=lambda: criar_tela_circulo(janela, lambda: mostrar_frame(tela_basicos)))
 btn_circulo.pack(pady=5)
 
