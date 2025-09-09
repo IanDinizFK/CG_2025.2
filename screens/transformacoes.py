@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 from typing import List, Tuple
 
-from services.transformacoes import aplicar_translacao, aplicar_escala
+from services.transformacoes import aplicar_translacao, aplicar_escala, aplicar_cisalhamento
 from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
 from utils.points import normalize_points
 from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, multiply_matrices
 
 Point = Tuple[float, float]
-PONTOS_PADRAO: List[Point] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)]
+PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
 
 
 def criar_tela_transformacoes_2d(janela, voltar_callback):
@@ -200,6 +200,103 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
 
             btn_aplicar = tk.Button(inputs_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
             btn_aplicar.pack(pady=5)
+
+        elif selected == "Cisalhamento":
+            tk.Label(inputs_frame, text="Parâmetros de Cisalhamento", font=("Helvetica", 14)).pack(pady=10)
+
+            frame_shx = tk.Frame(inputs_frame)
+            frame_shx.pack(pady=5)
+            tk.Label(frame_shx, text="ShX:", font=("Helvetica", 12)).grid(row=0, column=0)
+            entrada_shx = tk.Entry(frame_shx, width=10, font=("Helvetica", 12))
+            entrada_shx.insert(0, "0.0")
+            entrada_shx.grid(row=0, column=1, padx=10)
+
+            frame_shy = tk.Frame(inputs_frame)
+            frame_shy.pack(pady=5)
+            tk.Label(frame_shy, text="ShY:", font=("Helvetica", 12)).grid(row=0, column=0)
+            entrada_shy = tk.Entry(frame_shy, width=10, font=("Helvetica", 12))
+            entrada_shy.insert(0, "0.0")
+            entrada_shy.grid(row=0, column=1, padx=10)
+
+            tk.Label(inputs_frame, text="Centro de Cisalhamento", font=("Helvetica", 12)).pack(pady=10)
+            frame_centro = tk.Frame(inputs_frame)
+            frame_centro.pack(pady=5)
+            tk.Label(frame_centro, text="Cx:", font=("Helvetica", 12)).grid(row=0, column=0)
+            entrada_cx = tk.Entry(frame_centro, width=10, font=("Helvetica", 12))
+            entrada_cx.insert(0, "0.0")
+            entrada_cx.grid(row=0, column=1, padx=10)
+            tk.Label(frame_centro, text="Cy:", font=("Helvetica", 12)).grid(row=0, column=2)
+            entrada_cy = tk.Entry(frame_centro, width=10, font=("Helvetica", 12))
+            entrada_cy.insert(0, "0.0")
+            entrada_cy.grid(row=0, column=3, padx=10)
+
+            def aplicar():
+                try:
+                    shx = float(entrada_shx.get())
+                    shy = float(entrada_shy.get())
+                    cx = float(entrada_cx.get())
+                    cy = float(entrada_cy.get())
+                    pontos = canvas.get_pontos() or PONTOS_PADRAO
+
+                    limpar_console()
+                    console.insert(tk.END, f"Cisalhamento por ShX={shx}, ShY={shy} em centro (Cx={cx}, Cy={cy})\n")
+                    console.insert(tk.END, "Construção da Matriz de Cisalhamento (T(cx,cy) * Sh(shx,shy) * T(-cx,-cy)):\n")
+
+                    # 1️⃣ Transladar o centro para a origem
+                    t1 = translation_matrix(-cx, -cy)
+                    console.insert(tk.END, "T(-cx,-cy):\n")
+                    for linha in t1:
+                        console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
+                    console.insert(tk.END, "\n")
+
+                    # 2️⃣ Matriz de cisalhamento
+                    sh = [[1.0, shx, 0.0],
+                        [shy, 1.0, 0.0],
+                        [0.0, 0.0, 1.0]]
+                    console.insert(tk.END, "Sh(shx,shy):\n")
+                    for linha in sh:
+                        console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
+                    console.insert(tk.END, "\n")
+
+                    # 3️⃣ Multiplicar Sh * T(-cx,-cy)
+                    sh_t1 = multiply_matrices(sh, t1)
+                    console.insert(tk.END, "Sh * T(-cx,-cy):\n")
+                    for linha in sh_t1:
+                        console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
+                    console.insert(tk.END, "\n")
+
+                    # 4️⃣ Transladar de volta para o centro original
+                    t2 = translation_matrix(cx, cy)
+                    console.insert(tk.END, "T(cx,cy):\n")
+                    for linha in t2:
+                        console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
+                    console.insert(tk.END, "\n")
+
+                    # Matriz final
+                    mat = multiply_matrices(t2, sh_t1)
+                    console.insert(tk.END, "Matriz Final de Cisalhamento:\n")
+                    for linha in mat:
+                        console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
+                    console.insert(tk.END, "\n")
+
+                    # Aplicar a matriz aos pontos
+                    console.insert(tk.END, "Pontos Originais -> Transformados:\n")
+                    pontos_transformados = []
+                    for i, (x, y) in enumerate(pontos):
+                        nx, ny = apply_matrix_point(mat, x, y)
+                        pontos_transformados.append((nx, ny))
+                        console.insert(tk.END, f"P{i+1}: ({x}, {y}) -> ({nx}, {ny})\n")
+
+                    canvas.set_pontos(pontos_transformados)
+                    console.insert(tk.END, "\nPontos transformados aplicados ao canvas.\n")
+
+                except ValueError:
+                    messagebox.showerror("Erro", "Valores inválidos para ShX, ShY, Cx ou Cy.")
+
+
+            btn_aplicar = tk.Button(inputs_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
+            btn_aplicar.pack(pady=5)
+
 
         else:
             tk.Label(inputs_frame, text=f"{selected} em desenvolvimento", font=("Helvetica", 12)).pack(expand=True)

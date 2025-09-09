@@ -44,3 +44,23 @@ def scale_matrix(sx: float, sy: float, cx: float = 0.0, cy: float = 0.0) -> Matr
     t2 = translation_matrix(cx, cy)
     return multiply_matrices(t2, multiply_matrices(s, t1))
 
+def shear_matrix(shx: float, shy: float, cx: float = 0.0, cy: float = 0.0) -> Matrix3:
+    
+    # Translada o centro para a origem
+    t1 = translation_matrix(-cx, -cy)
+
+    # Matriz de cisalhamento
+    s = [
+        [1.0, shx, 0.0],  # x' = x + shx*y
+        [shy, 1.0, 0.0],  # y' = y + shy*x
+        [0.0, 0.0, 1.0]
+    ]
+
+    # Translada de volta para o centro original
+    t2 = translation_matrix(cx, cy)
+
+    # Matriz final: T(cx,cy) * S(shx,shy) * T(-cx,-cy)
+    return multiply_matrices(t2, multiply_matrices(s, t1))
+
+
+

@@ -10,7 +10,7 @@ from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
 
 Point = Tuple[float, float]
-PONTOS_PADRAO: List[Point] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)]
+PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
 
 
 def mostrar_frame(frame):

@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point
+from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, shear_matrix
 
 
 Point = Tuple[float, float]
@@ -25,6 +25,9 @@ def aplicar_reflexao(pontos: List[Point], tipo: str) -> List[Point]:
     raise NotImplementedError("Reflexão será implementada futuramente.")
 
 
-def aplicar_cisalhamento(pontos: List[Point], shx: float = 0.0, shy: float = 0.0) -> List[Point]:
-    raise NotImplementedError("Cisalhamento será implementado futuramente.")
+def aplicar_cisalhamento(pontos: List[Point], shx: float = 0.0, shy: float = 0.0, cx: float = 0.0, cy: float = 0.0) -> List[Point]:
+    """Aplica cisalhamento nos eixos X e/ou Y usando matrizes homogêneas."""
+    mat = shear_matrix(shx, shy, cx, cy)
+    return [apply_matrix_point(mat, x, y) for x, y in pontos]
+
 
