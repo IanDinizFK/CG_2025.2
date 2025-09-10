@@ -3,15 +3,13 @@ sys.path.append('.')
 import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List, Tuple
-
-from screens.setpixel import criar_tela_setpixel
 from screens.transformacoes import criar_tela_transformacoes_2d
 from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
-
+from screens.setpixel import criar_tela_setpixel
+from screens.circle_midpoint import criar_tela_circulo
 Point = Tuple[float, float]
 PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
-
 
 def mostrar_frame(frame):
     frame.tkraise()
@@ -55,6 +53,10 @@ btn_setpixel.pack(pady=5)
 
 btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: mostrar_mensagem("DDA"))
 btn_dda.pack(pady=5)
+
+btn_circulo = tk.Button(tela_basicos, text="Círculo algoritmos", width=20,
+                        command=lambda: criar_tela_circulo(janela, lambda: mostrar_frame(tela_basicos)))
+btn_circulo.pack(pady=5)
 
 btn_voltar_basicos = tk.Button(tela_basicos, text="Voltar", width=10, command=lambda: mostrar_frame(tela_inicial))
 btn_voltar_basicos.pack(pady=20)
