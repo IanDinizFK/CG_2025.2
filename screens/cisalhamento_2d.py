@@ -16,7 +16,6 @@ PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.2
 def criar_tela_cisalhamento(root, voltar_callback):
     root.geometry("1200x700")
 
-    # Limpa widgets anteriores
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -25,7 +24,6 @@ def criar_tela_cisalhamento(root, voltar_callback):
     main_frame = tk.Frame(root)
     main_frame.pack(fill=tk.BOTH, expand=True)
 
-    # Lado esquerdo: parâmetros e editor de pontos
     left_frame = tk.Frame(main_frame, width=400)
     left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
 
@@ -63,7 +61,6 @@ def criar_tela_cisalhamento(root, voltar_callback):
     entrada_cy.grid(row=0, column=3, padx=10)
 
 
-    # Função aplicar cisalhamento
     def aplicar():
         try:
             shx = float(entrada_shx.get()) / 10.0
@@ -81,7 +78,6 @@ def criar_tela_cisalhamento(root, voltar_callback):
     btn_aplicar = tk.Button(left_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
     btn_aplicar.pack(pady=5)
 
-    # Editor de pontos
     pontos_editor = PointsEditor(left_frame, initial_points=PONTOS_PADRAO)
     pontos_editor.pack(fill=tk.X, pady=5)
 
@@ -98,13 +94,11 @@ def criar_tela_cisalhamento(root, voltar_callback):
     btn_atualizar = tk.Button(left_frame, text="Atualizar Pontos", font=("Helvetica", 12), command=atualizar_pontos)
     btn_atualizar.pack(pady=5)
 
-    # Lado direito: canvas OpenGL
     right_frame = tk.Frame(main_frame, width=800)
     right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
     canvas = OpenGLCanvas(right_frame, width=800, height=600)
     canvas.pack(fill=tk.BOTH, expand=True)
     canvas.set_pontos(PONTOS_PADRAO)
 
-    # Botão voltar
     btn_voltar = tk.Button(left_frame, text="Voltar", font=("Helvetica", 12), command=voltar_callback)
     btn_voltar.pack(pady=10)

@@ -242,14 +242,12 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                     console.insert(tk.END, f"Cisalhamento por ShX={shx}, ShY={shy} em centro (Cx={cx}, Cy={cy})\n")
                     console.insert(tk.END, "Construção da Matriz de Cisalhamento (T(cx,cy) * Sh(shx,shy) * T(-cx,-cy)):\n")
 
-                    # 1️⃣ Transladar o centro para a origem
                     t1 = translation_matrix(-cx, -cy)
                     console.insert(tk.END, "T(-cx,-cy):\n")
                     for linha in t1:
                         console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
                     console.insert(tk.END, "\n")
 
-                    # 2️⃣ Matriz de cisalhamento
                     sh = [[1.0, shx, 0.0],
                         [shy, 1.0, 0.0],
                         [0.0, 0.0, 1.0]]
@@ -258,28 +256,24 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                         console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
                     console.insert(tk.END, "\n")
 
-                    # 3️⃣ Multiplicar Sh * T(-cx,-cy)
                     sh_t1 = multiply_matrices(sh, t1)
                     console.insert(tk.END, "Sh * T(-cx,-cy):\n")
                     for linha in sh_t1:
                         console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
                     console.insert(tk.END, "\n")
 
-                    # 4️⃣ Transladar de volta para o centro original
                     t2 = translation_matrix(cx, cy)
                     console.insert(tk.END, "T(cx,cy):\n")
                     for linha in t2:
                         console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
                     console.insert(tk.END, "\n")
 
-                    # Matriz final
                     mat = multiply_matrices(t2, sh_t1)
                     console.insert(tk.END, "Matriz Final de Cisalhamento:\n")
                     for linha in mat:
                         console.insert(tk.END, f"[{' '.join(map(str, linha))}]\n")
                     console.insert(tk.END, "\n")
 
-                    # Aplicar a matriz aos pontos
                     console.insert(tk.END, "Pontos Originais -> Transformados:\n")
                     pontos_transformados = []
                     for i, (x, y) in enumerate(pontos):
