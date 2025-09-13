@@ -60,8 +60,8 @@ class CGMatriz:
         for i in range(self.m):
             str_result += "["
             for j in range(self.n):
-                str_result += str(self.matriz[i][j])  
-                if j+1 < self.n : str_result +=  ","
+                str_result += str(round(self.matriz[i][j], 2))  
+                if j+1 < self.n : str_result +=  " "
             if i+1 < self.m: str_result += "]\n" 
             else: str_result +="]" 
         return str_result
