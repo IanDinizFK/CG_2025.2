@@ -1,7 +1,11 @@
 import os
 import sys
+import platform
+
 sys.path.append('.')
-os.environ['PYOPENGL_PLATFORM'] = 'glx'
+so = platform.system()
+if so == "Linux":
+    os.environ['PYOPENGL_PLATFORM'] = 'glx'
 
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -93,7 +97,6 @@ def mostrar_mensagem(nome):
     popup.title(nome)
     popup.geometry("250x100")
     tk.Label(popup, text=f"{nome} em desenvolvimento", font=("Arial", 10)).pack(pady=20)
-
 
 mostrar_frame(tela_inicial)
 
