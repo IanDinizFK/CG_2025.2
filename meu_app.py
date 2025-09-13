@@ -11,6 +11,9 @@ from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
 from screens.setpixel import criar_tela_setpixel
 from screens.circle_midpoint import criar_tela_circulo
+from DDA import DDA
+from PontoMedio import pmedio
+
 Point = Tuple[float, float]
 PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
 
@@ -54,8 +57,11 @@ btn_setpixel = tk.Button(
 )
 btn_setpixel.pack(pady=5)
 
-btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: mostrar_mensagem("DDA"))
+btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: DDA())
 btn_dda.pack(pady=5)
+
+btn_pmedio = tk.Button(tela_basicos, text="Ponto Médio", width=20, command=lambda: pmedio())
+btn_pmedio.pack(pady=5)
 
 btn_circulo = tk.Button(tela_basicos, text="Círculo algoritmos", width=20,
                         command=lambda: criar_tela_circulo(janela, lambda: mostrar_frame(tela_basicos)))
