@@ -1,2 +1,3 @@
+.venv/
 ./screens/__pycache__/
 *.pyc

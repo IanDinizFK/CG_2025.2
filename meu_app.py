@@ -1,5 +1,8 @@
+import os
 import sys
 sys.path.append('.')
+os.environ['PYOPENGL_PLATFORM'] = 'glx'
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List, Tuple

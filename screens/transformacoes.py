@@ -5,6 +5,8 @@ from typing import List, Tuple
 from services.transformacoes import aplicar_translacao, aplicar_escala, aplicar_cisalhamento
 from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
+
+from utils.CGmatriz import CGMatriz
 from utils.points import normalize_points
 from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, multiply_matrices
 
@@ -282,6 +284,52 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                         console.insert(tk.END, f"P{i+1}: ({x}, {y}) -> ({nx}, {ny})\n")
 
                     canvas.set_pontos(pontos_transformados)
+                    console.insert(tk.END, "\nPontos transformados aplicados ao canvas.\n")
+
+                except ValueError:
+                    messagebox.showerror("Erro", "Valores inválidos para ShX, ShY, Cx ou Cy.")
+
+
+            btn_aplicar = tk.Button(inputs_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
+            btn_aplicar.pack(pady=5)
+
+        elif selected == "Rotação":
+            TRIANGLE = [(0.0, 0.0),(0.4, 0.0),(0.2, 0.4)]
+            pontos_editor.set_points(TRIANGLE)
+            canvas.set_pontos(pontos_editor.get_points())
+            
+            tk.Label(inputs_frame, text="Parâmetros da Rotação", font=("Helvetica", 14)).pack(pady=10)
+
+            frame_angle = tk.Frame(inputs_frame)
+            frame_angle.pack(pady=5)
+            tk.Label(frame_angle, text="Angulo:", font=("Helvetica", 12)).grid(row=0, column=0)
+            entrada_angle = tk.Entry(frame_angle, width=10, font=("Helvetica", 12))
+            entrada_angle.insert(0, "0.0")
+            entrada_angle.grid(row=0, column=1, padx=10)
+
+            #controller
+            def aplicar():
+                try:
+                    angle = float(entrada_angle.get())
+                    pontos = CGMatriz.create_by_pointlist(pontos_editor.get_points())
+
+                    limpar_console()
+                    console.insert(tk.END, f"Rotação em '{angle}' graus)\n")
+                    console.insert(tk.END, "Construção da Matriz de Rotação: (T(cx,cy) * Sh(shx,shy) * T(-cx,-cy)):\n")
+
+                    t1 = CGMatriz.get_rotate(angle)
+                     
+                    pontos = pontos * t1
+                    
+                    console.insert(tk.END, f"{pontos}\n")
+                    console.insert(tk.END, "-----------------------\n")
+                    console.insert(tk.END, f"{t1}\n")
+                    console.insert(tk.END, "-----------------------\n")
+                    console.insert(tk.END, f"{pontos}\n")
+
+                    canvas.set_pontos(pontos.to_points())
+                    pontos_editor.set_points(pontos.to_points())
+
                     console.insert(tk.END, "\nPontos transformados aplicados ao canvas.\n")
 
                 except ValueError:
