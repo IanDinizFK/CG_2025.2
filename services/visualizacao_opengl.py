@@ -27,7 +27,7 @@ class OpenGLCanvas(OpenGLFrame):
 
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(-1, 1, -1, 1, -1, 1)
+        glOrtho(-10, 10, -10, 10, -1, 1)
         glMatrixMode(GL_MODELVIEW)
 
         self.pontos = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)]
@@ -45,10 +45,12 @@ class OpenGLCanvas(OpenGLFrame):
 
         glColor3f(1.0, 0.0, 0.0)
         glBegin(GL_LINES)
-        glVertex2f(-1.0, 0.0)
-        glVertex2f(1.0, 0.0)
-        glVertex2f(0.0, -1.0)
-        glVertex2f(0.0, 1.0)
+        # eixo X
+        glVertex2f(-10.0, 0.0)
+        glVertex2f( 10.0, 0.0)
+        # eixo Y
+        glVertex2f(0.0, -10.0)
+        glVertex2f(0.0,  10.0)
         glEnd()
 
         glColor3f(0.0, 0.0, 0.0)
