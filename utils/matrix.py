@@ -44,6 +44,37 @@ def scale_matrix(sx: float, sy: float, cx: float = 0.0, cy: float = 0.0) -> Matr
     t2 = translation_matrix(cx, cy)
     return multiply_matrices(t2, multiply_matrices(s, t1))
 
+
+
+def reflection_matrix(kind: str) -> Matrix3:
+    """Retorna a matriz de reflexao homogenea para o tipo informado."""
+    tipo = kind.lower()
+    if tipo == 'x':
+        return [
+            [1.0, 0.0, 0.0],
+            [0.0, -1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    if tipo == 'y':
+        return [
+            [-1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    if tipo == 'origem':
+        return [
+            [-1.0, 0.0, 0.0],
+            [0.0, -1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    if tipo == 'y=x':
+        return [
+            [0.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    raise ValueError(f"Tipo de reflexao desconhecido: {kind!r}")
+
 def shear_matrix(shx: float, shy: float, cx: float = 0.0, cy: float = 0.0) -> Matrix3:
     
     # Translada o centro para a origem

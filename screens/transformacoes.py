@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 from typing import List, Tuple
 
-from services.transformacoes import aplicar_translacao, aplicar_escala, aplicar_cisalhamento
+from services.transformacoes import aplicar_translacao, aplicar_escala, aplicar_cisalhamento, aplicar_reflexao
 from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
 from utils.points import normalize_points
-from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, multiply_matrices
+from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, multiply_matrices, reflection_matrix
 
 Point = Tuple[float, float]
 PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
@@ -197,6 +197,44 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                     console.insert(tk.END, "\nPontos Transformados aplicados ao canvas.\n")
                 except ValueError:
                     messagebox.showerror("Erro", "Valores inválidos.")
+
+            btn_aplicar = tk.Button(inputs_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
+            btn_aplicar.pack(pady=5)
+
+        elif selected.startswith("Reflex"):
+            tk.Label(inputs_frame, text="Parametros de Reflexao", font=("Helvetica", 14)).pack(pady=10)
+            tipos_options = [
+                ("Eixo X", "x"),
+                ("Eixo Y", "y"),
+                ("Origem", "origem"),
+                ("Reta y=x", "y=x"),
+            ]
+            tipos_map = dict(tipos_options)
+            combo_tipo = ttk.Combobox(inputs_frame, values=[label for label, _ in tipos_options], state="readonly", font=("Helvetica", 12))
+            combo_tipo.pack(pady=5)
+            combo_tipo.current(0)
+
+            def aplicar():
+                try:
+                    pontos = canvas.get_pontos() or PONTOS_PADRAO
+                    tipo_label = combo_tipo.get()
+                    tipo_valor = tipos_map.get(tipo_label)
+                    if not tipo_valor:
+                        raise ValueError("Selecao de reflexao invalida.")
+                    limpar_console()
+                    console.insert(tk.END, f"Reflexao: {tipo_label} ({tipo_valor})\n")
+                    mat = reflection_matrix(tipo_valor)
+                    console.insert(tk.END, "Matriz de Reflexao:\n")
+                    for linha in mat:
+                        console.insert(tk.END, f"[{linha[0]} {linha[1]} {linha[2]}]\n")
+                    console.insert(tk.END, "\nPontos Originais -> Transformados:\n")
+                    pontos_transformados = aplicar_reflexao(pontos, tipo_valor)
+                    for i, ((x, y), (nx, ny)) in enumerate(zip(pontos, pontos_transformados), start=1):
+                        console.insert(tk.END, f"P{i}: ({x}, {y}) -> ({nx}, {ny})\n")
+                    canvas.set_pontos(pontos_transformados)
+                    console.insert(tk.END, "\nPontos transformados aplicados ao canvas.\n")
+                except ValueError as exc:
+                    messagebox.showerror("Erro", str(exc))
 
             btn_aplicar = tk.Button(inputs_frame, text="Aplicar", font=("Helvetica", 12), command=aplicar)
             btn_aplicar.pack(pady=5)

@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, shear_matrix
+from utils.matrix import translation_matrix, scale_matrix, apply_matrix_point, shear_matrix, reflection_matrix
 
 
 Point = Tuple[float, float]
@@ -22,7 +22,8 @@ def aplicar_rotacao(pontos: List[Point], angulo_graus: float, cx: float = 0.0, c
 
 def aplicar_reflexao(pontos: List[Point], tipo: str) -> List[Point]:
     """tipo: 'x', 'y', 'origem', 'y=x'"""
-    raise NotImplementedError("Reflexão será implementada futuramente.")
+    mat = reflection_matrix(tipo)
+    return [apply_matrix_point(mat, x, y) for x, y in pontos]
 
 
 def aplicar_cisalhamento(pontos: List[Point], shx: float = 0.0, shy: float = 0.0, cx: float = 0.0, cy: float = 0.0) -> List[Point]:
