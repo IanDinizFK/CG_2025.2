@@ -73,7 +73,7 @@ def criar_tela_escala(root, voltar_callback):
             pontos = pontos_editor.get_points() or PONTOS_PADRAO
             pontos_transformados = aplicar_escala(pontos, sx, sy, cx, cy)
             pontos_transformados = normalize_points(pontos_transformados)
-            canvas.set_pontos(pontos_transformados)
+            canvas.set_pontos(pontos_transformados, auto_center=False)
         except ValueError:
             messagebox.showerror("Erro", "Valores inválidos.")
 
