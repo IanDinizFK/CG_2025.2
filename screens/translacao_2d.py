@@ -51,7 +51,7 @@ def criar_tela_translacao(root, voltar_callback):
                 pontos = PONTOS_PADRAO
             pontos_transformados = aplicar_translacao(pontos, tx, ty)
             pontos_transformados = normalize_points(pontos_transformados)
-            canvas.set_pontos(pontos_transformados)
+            canvas.set_pontos(pontos_transformados, auto_center=False)
         except ValueError:
             messagebox.showerror("Erro", "Valores inválidos para Tx ou Ty.")
 

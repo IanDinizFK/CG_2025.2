@@ -113,7 +113,7 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                         nx, ny = apply_matrix_point(mat, x, y)
                         console.insert(tk.END, f"({nx}, {ny})\n")
                     pontos_transformados = [(apply_matrix_point(mat, x, y)[0], apply_matrix_point(mat, x, y)[1]) for x, y in pontos]
-                    canvas.set_pontos(pontos_transformados)
+                    canvas.set_pontos(pontos_transformados, auto_center=False)
                     console.insert(tk.END, "\nPontos Transformados aplicados ao canvas.\n")
                 except ValueError:
                     messagebox.showerror("Erro", "Valores inválidos para Tx ou Ty.")
@@ -231,7 +231,7 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                     pontos_transformados = aplicar_reflexao(pontos, tipo_valor)
                     for i, ((x, y), (nx, ny)) in enumerate(zip(pontos, pontos_transformados), start=1):
                         console.insert(tk.END, f"P{i}: ({x}, {y}) -> ({nx}, {ny})\n")
-                    canvas.set_pontos(pontos_transformados)
+                    canvas.set_pontos(pontos_transformados, auto_center=False)
                     console.insert(tk.END, "\nPontos transformados aplicados ao canvas.\n")
                 except ValueError as exc:
                     messagebox.showerror("Erro", str(exc))
