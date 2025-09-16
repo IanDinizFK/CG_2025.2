@@ -42,7 +42,9 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
             pontos = pontos_editor.get_points()
             if not pontos:
                 pontos = PONTOS_PADRAO
-            canvas.set_pontos(pontos)
+                canvas.set_pontos(pontos, auto_center=False)
+            else:
+                canvas.set_pontos(pontos, auto_center=False)
         except ValueError:
             messagebox.showerror("Erro", "Pontos inválidos no editor.")
 
@@ -67,7 +69,7 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
     canvas_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
     canvas = OpenGLCanvas(canvas_frame, width=800, height=600)
     canvas.pack(fill=tk.BOTH, expand=True)
-    canvas.set_pontos(PONTOS_PADRAO)
+    canvas.set_pontos(PONTOS_PADRAO, auto_center=True)
 
     def atualizar_conteudo(event=None):
         selected = combo.get()
