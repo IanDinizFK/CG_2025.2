@@ -8,3 +8,6 @@ depois rode
 
 py -m pip install PyOpenGL PyOpenGL-accelerate
 
+e depois
+
+py -m pip install pyopengltk
