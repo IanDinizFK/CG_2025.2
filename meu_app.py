@@ -1,5 +1,12 @@
+import os
 import sys
+import platform
+
 sys.path.append('.')
+so = platform.system()
+if so == "Linux":
+    os.environ['PYOPENGL_PLATFORM'] = 'glx'
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List, Tuple
@@ -8,6 +15,9 @@ from services.visualizacao_opengl import OpenGLCanvas
 from screens.points_editor import PointsEditor
 from screens.setpixel import criar_tela_setpixel
 from screens.circle_midpoint import criar_tela_circulo
+from DDA import DDA
+from PontoMedio import pmedio
+
 Point = Tuple[float, float]
 PONTOS_PADRAO: List[Point] = [(-0.25, -0.25), (0.25, -0.25), (0.25, 0.25), (-0.25, 0.25)]
 
@@ -51,8 +61,11 @@ btn_setpixel = tk.Button(
 )
 btn_setpixel.pack(pady=5)
 
-btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: mostrar_mensagem("DDA"))
+btn_dda = tk.Button(tela_basicos, text="DDA", width=20, command=lambda: DDA())
 btn_dda.pack(pady=5)
+
+btn_pmedio = tk.Button(tela_basicos, text="Ponto Médio", width=20, command=lambda: pmedio())
+btn_pmedio.pack(pady=5)
 
 btn_circulo = tk.Button(tela_basicos, text="Círculo algoritmos", width=20,
                         command=lambda: criar_tela_circulo(janela, lambda: mostrar_frame(tela_basicos)))
@@ -84,7 +97,6 @@ def mostrar_mensagem(nome):
     popup.title(nome)
     popup.geometry("250x100")
     tk.Label(popup, text=f"{nome} em desenvolvimento", font=("Arial", 10)).pack(pady=20)
-
 
 mostrar_frame(tela_inicial)
 
