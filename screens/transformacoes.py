@@ -337,7 +337,7 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
             #view
             TRIANGLE = [(0.0, 0.0),(0.4, 0.0),(0.2, 0.4)]
             pontos_editor.set_points(TRIANGLE)
-            canvas.set_pontos(pontos_editor.get_points())
+            canvas.set_pontos(pontos_editor.get_points(), auto_center=False)
             
             tk.Label(inputs_frame, text="Parâmetros da Rotação", font=("Helvetica", 14)).pack(pady=10)
 
@@ -365,7 +365,7 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
                     console.insert(tk.END, f"Matriz de Rotação em '{angle}' graus:\n")
                     console.insert(tk.END, f"{matriz_de_rotacao}\n\n")
 
-                    canvas.set_pontos(pontos.to_points())
+                    canvas.set_pontos(pontos.to_points(), auto_center=False)
                     pontos_editor.set_points(pontos.to_points())
 
                     console.insert(tk.END, f"Matriz Resultante:\n")
