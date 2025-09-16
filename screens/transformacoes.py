@@ -65,11 +65,11 @@ def criar_tela_transformacoes_2d(janela, voltar_callback):
 
     limpar_console()
 
-    canvas_frame = tk.Frame(content_frame, width=810, height=610)
+    canvas_frame = tk.Frame(content_frame, width=810, height=600)
     canvas_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
     canvas = OpenGLCanvas(canvas_frame, width=800, height=600)
     canvas.pack(fill=tk.BOTH, expand=True)
-    canvas.set_pontos(PONTOS_PADRAO, auto_center=True)
+    canvas.set_pontos(PONTOS_PADRAO, auto_center=False)
 
     def atualizar_conteudo(event=None):
         selected = combo.get()
