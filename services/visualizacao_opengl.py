@@ -58,7 +58,16 @@ class OpenGLCanvas(OpenGLFrame):
         half_extent = self._viewport_half_extent
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(cx - half_extent, cx + half_extent, cy - half_extent, cy + half_extent, -1, 1)
+
+        aspect = self.width / self.height if self.height else 1.0
+        if aspect >= 1.0:
+            half_extent_x = half_extent * aspect
+            half_extent_y = half_extent
+        else:
+            half_extent_x = half_extent
+            half_extent_y = half_extent / max(aspect, 1e-6)
+
+        glOrtho(cx - half_extent_x, cx + half_extent_x, cy - half_extent_y, cy + half_extent_y, -1, 1)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
 
@@ -92,10 +101,17 @@ class OpenGLCanvas(OpenGLFrame):
 
         cx, cy = self._viewport_center
         half_extent = self._viewport_half_extent
-        left = cx - half_extent
-        right = cx + half_extent
-        bottom = cy - half_extent
-        top = cy + half_extent
+        aspect = self.width / self.height if self.height else 1.0
+        if aspect >= 1.0:
+            half_extent_x = half_extent * aspect
+            half_extent_y = half_extent
+        else:
+            half_extent_x = half_extent
+            half_extent_y = half_extent / max(aspect, 1e-6)
+        left = cx - half_extent_x
+        right = cx + half_extent_x
+        bottom = cy - half_extent_y
+        top = cy + half_extent_y
 
         glColor3f(1.0, 0.0, 0.0)
         glBegin(GL_LINES)
